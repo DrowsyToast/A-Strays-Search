@@ -5,14 +5,17 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject[] itemPrefabs;
+    public GameObject enemyPrefab;
     [SerializeField] private float startDelay = 3;
     [SerializeField] private float spawnInterval = 5;
     [SerializeField] private float spawnRangeX = 20;
-    [SerializeField] private float spawnPosZ = 20;
+    [SerializeField] private float spawnRangeZ = 20;
     // Start is called before the first frame update
     void Start()
     {
         InvokeRepeating("SpawnRandomItem", startDelay, spawnInterval);
+
+        Instantiate(enemyPrefab, new Vector3(-11.5f, 0.6f, -10.8f), enemyPrefab.transform.rotation);
     }
 
     // Update is called once per frame
@@ -23,8 +26,8 @@ public class SpawnManager : MonoBehaviour
     void SpawnRandomItem()
     {
         int itemIndex = Random.Range (0, itemPrefabs.Length);
-        Vector3 spawnpos = new Vector3(Random.Range(-xSpawnRange, xSpawnRange), 0, zSpawnPos);
-        Instantiate(itemPrefabs[itemIndex], new Vector3(0, 0, 20) spawnpos, itemPrefabs[itemIndex].transform.rotation);
+        Vector3 spawnpos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0.5f, Random.Range(-spawnRangeZ,spawnRangeZ));
+        Instantiate(itemPrefabs[itemIndex], spawnpos, itemPrefabs[itemIndex].transform.rotation);
     }
 
 }
