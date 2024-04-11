@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float gravityModifier;
     public bool isOnGround = true;
+    public bool gameOver = false;
 
     private GameObject playerCamera;
     // Start is called before the first frame update
@@ -24,11 +25,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MovePlayer();
+        if (gameOver == false)
+        {
+            MovePlayer();
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
         isOnGround = true;
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+        }
     }
     //Moves the Player with WASD and allows Player to jump by pressing Space
     void MovePlayer()
@@ -42,6 +52,13 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            Destroy(other.gameObject);
         }
     }
     void CursorLock()
