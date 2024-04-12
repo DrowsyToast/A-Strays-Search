@@ -7,10 +7,13 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] itemPrefabs;
     public GameObject enemyPrefab;
     [SerializeField] private float startDelay = 3;
+    [SerializeField] private float enemySpawnDelay = 10;
     [SerializeField] private float spawnInterval = 5;
     [SerializeField] private float spawnRangeX = 20;
     [SerializeField] private float spawnRangeZ = 20;
     private PlayerController playerControllerScript;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +21,7 @@ public class SpawnManager : MonoBehaviour
 
         playerControllerScript = GameObject.Find ("Player").GetComponent<PlayerController>();
 
-        Instantiate(enemyPrefab, new Vector3(-11.5f, 0.6f, -10.8f), enemyPrefab.transform.rotation);
+        StartCoroutine(nameof(DelaySpawn));
     }
 
     // Update is called once per frame
@@ -34,6 +37,17 @@ public class SpawnManager : MonoBehaviour
         Vector3 spawnpos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0.5f, Random.Range(-spawnRangeZ,spawnRangeZ));
         Instantiate(itemPrefabs[itemIndex], spawnpos, itemPrefabs[itemIndex].transform.rotation);
         }
+    }
+
+    void SpawnEnemy()
+    {
+        Instantiate(enemyPrefab, new Vector3(-11.5f, 0.6f, -10.8f), enemyPrefab.transform.rotation);
+    }
+
+    IEnumerator DelaySpawn()
+    {
+        yield return new WaitForSeconds(enemySpawnDelay);
+        SpawnEnemy();
     }
 
 }
